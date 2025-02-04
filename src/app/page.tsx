@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import RawHtmlComponent from '@components/RawHtmlComponent'
+import Script from "next/script";
 
 const rawHtml = `
 
@@ -544,7 +545,22 @@ const rawHtml = `
 export default function Page() {
   return (
     <div>
-      <RawHtmlComponent htmlContent={rawHtml} />
+              <div className = "padded-body">
+        <main className="min-h-screen bg-gray-100">
+        <RawHtmlComponent htmlContent={rawHtml} />
+        </main>
+
+        <Script
+          src="https://use.fontawesome.com/releases/v5.15.4/js/all.js"
+          crossOrigin="anonymous"
+          strategy="lazyOnload"
+        />
+        <Script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+          strategy="lazyOnload"
+        />
+        </div>
+      
     </div>
   );
 };

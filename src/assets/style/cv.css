@@ -11295,7 +11295,7 @@ body {
 }
 
 @media (min-width: 992px) {
-  body {
+  .padded-body {
     padding-top: 0;
     padding-left: 17rem;
   }
