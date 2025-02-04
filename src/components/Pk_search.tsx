@@ -3,26 +3,24 @@ import React, { useState, useEffect, useRef } from "react";
 import { fetchPokemonDetails } from "@components/Pk_api";
 import Pk_display from "@components/Pk_display";
 
-type PokemonDetails = {
-  pokemon: {
-    sprite: string | undefined;
-    name: string;
-    Types: string[];
-    Abilities: string[];
-    BaseStats: {
-      HP: number;
-      Attack: number;
-      Defense: number;
-      SpecialAttack: number;
-      SpecialDefense: number;
-      Speed: number;
-    };
-    Moves: {
-      moveName: string;
-      levelLearnedAt: number;
-      moveUrl: string;
-    }[];
-  } | null;
+interface PokemonDetails {
+  sprite: string;
+  name: string;
+  Types: string[];
+  Abilities: string[];
+  BaseStats: {
+    HP: number;
+    Attack: number;
+    Defense: number;
+    SpecialAttack: number;
+    SpecialDefense: number;
+    Speed: number;
+  };
+  Moves: {
+    moveName: string;
+    levelLearnedAt: number;
+    moveUrl: string;
+  }[];
 }
 
 
@@ -36,7 +34,21 @@ const Pk_search: React.FC = () => {
   const [pokemonList, setPokemonList] = useState<Pokemon[]>([]);
   const [filteredPokemon, setFilteredPokemon] = useState<Pokemon[]>([]);
   const [showDropdown, setShowDropdown] = useState(false);
-  const [selectedPokemon, setSelectedPokemon]  = useState<PokemonDetails | null>(null);
+  const [selectedPokemon, setSelectedPokemon] = useState<PokemonDetails>({
+    sprite: 'default_sprite_png',
+    name: '',
+    Types: [],
+    Abilities: [],
+    BaseStats: {
+      HP: 0,
+      Attack: 0,
+      Defense: 0,
+      SpecialAttack: 0,
+      SpecialDefense: 0,
+      Speed: 0
+    },
+    Moves: []
+  });
   const dropdownRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -137,7 +149,7 @@ const Pk_search: React.FC = () => {
               <li 
                 key={index} 
                 style={{ padding: "5px 0", cursor: "pointer" }}
-                onClick={() => handlePokemonClick(pokemon)} // ✅ Works now!
+                onClick={() => handlePokemonClick(pokemon)}
               >
                 {pokemon.name}
               </li>
@@ -146,7 +158,7 @@ const Pk_search: React.FC = () => {
         </div>
       )}
 
-      {selectedPokemon && <Pk_display pokemon={selectedPokemon} />} {/* ✅ Now it displays */}
+      {selectedPokemon && <Pk_display pokemon={selectedPokemon} />} 
     </div>
   );
 };

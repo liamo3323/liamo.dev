@@ -3,23 +3,23 @@ import Image from 'next/image';
 import ProgressBar from './Pk_stat_bar';
 import PokeMoveTable from './Pk_move_list';
 
-interface EvolutionDetails {
-  trigger: { name: string };
-  item?: { name: string } | null; 
-  min_level?: number | null;
-  time_of_day?: string | null;
-  known_move?: { name: string } | null;
-  known_move_type?: { name: string } | null;
-  location?: { name: string } | null;
-  held_item?: { name: string } | null;
-  min_happiness?: number | null;
-  min_beauty?: number | null;
-  min_affection?: number | null;
-  gender?: number | null;
-  relative_physical_stats?: number | null;
-  needs_overworld_rain?: boolean | null;
-  turn_upside_down?: boolean | null;
-}
+// interface EvolutionDetails {
+//   trigger: { name: string };
+//   item?: { name: string } | null; 
+//   min_level?: number | null;
+//   time_of_day?: string | null;
+//   known_move?: { name: string } | null;
+//   known_move_type?: { name: string } | null;
+//   location?: { name: string } | null;
+//   held_item?: { name: string } | null;
+//   min_happiness?: number | null;
+//   min_beauty?: number | null;
+//   min_affection?: number | null;
+//   gender?: number | null;
+//   relative_physical_stats?: number | null;
+//   needs_overworld_rain?: boolean | null;
+//   turn_upside_down?: boolean | null;
+// }
 
 
 interface PokemonProps {
@@ -36,7 +36,6 @@ interface PokemonProps {
       SpecialDefense: number;
       Speed: number;
     };
-    Evolutions: Map<string, EvolutionDetails | null>;
     Moves: {
       moveName: string;
       levelLearnedAt: number;
