@@ -2,25 +2,7 @@ import React from 'react';
 import Image from 'next/image';
 import ProgressBar from './Pk_stat_bar';
 import PokeMoveTable from './Pk_move_list';
-
-// interface EvolutionDetails {
-//   trigger: { name: string };
-//   item?: { name: string } | null; 
-//   min_level?: number | null;
-//   time_of_day?: string | null;
-//   known_move?: { name: string } | null;
-//   known_move_type?: { name: string } | null;
-//   location?: { name: string } | null;
-//   held_item?: { name: string } | null;
-//   min_happiness?: number | null;
-//   min_beauty?: number | null;
-//   min_affection?: number | null;
-//   gender?: number | null;
-//   relative_physical_stats?: number | null;
-//   needs_overworld_rain?: boolean | null;
-//   turn_upside_down?: boolean | null;
-// }
-
+import {getPokemonLevelUpMoves} from './Pk_api'
 
 interface PokemonProps {
   pokemon: {
@@ -49,6 +31,7 @@ const Pk_display: React.FC<PokemonProps> = ({ pokemon }) => {
     return <p>No Pokémon selected.</p>;
   }
   console.log(pokemon.Moves)
+  const poke_moves = <getPokemonLevelUpMoves pokemon={pokemon.Moves} />
   return (
     <div style={{ maxWidth: "600px", margin: "0 auto", padding: "20px" }}>
       <h3>{pokemon.name}</h3>
@@ -70,7 +53,7 @@ const Pk_display: React.FC<PokemonProps> = ({ pokemon }) => {
         <ProgressBar value={pokemon.BaseStats.Speed} max={256} color="#d51dad" />
       </ul>
 
-      <p>Moves: <PokeMoveTable moves={pokemon.Moves}/> </p>
+      <p>Moves: <PokeMoveTable moves={poke_moves}/> </p>
 
     </div>
   );

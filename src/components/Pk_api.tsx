@@ -92,33 +92,61 @@ interface EvolutionChain {
     return evolutionMap
   }
 
-  export async function getPokemonLevelUpMoves(name: string = 'bulbasaur') {
-    const pkmn = await pokiapi.getPokemonByName(name)
+export async function getPokemonLevelUpMoves(name: string = 'bulbasaur') {
+  try {
+    const pkmn = await pokiapi.getPokemonByName(name);
     
+    if (!pkmn || !Array.isArray(pkmn.moves)) {
+      console.warn(`No move data found for ${name}. Returning default values.`);
+      return [{ moveName: 'Unknown', levelLearnedAt: 0, moveUrl: '' }];
+    }
+
     const moves = pkmn.moves.filter((move) => 
-      move.version_group_details.some((detail) => detail.move_learn_method.name === 'level-up' && detail.version_group.name === 'scarlet-violet')
-    )
-    
-      const levelUpMoves = moves.map((move) => {
-        const levelUpDetail = move.version_group_details.find(
-          (detail) => detail.move_learn_method.name === 'level-up' && detail.version_group.name === 'scarlet-violet'
+      move.version_group_details.some(
+        (detail) => 
+          detail.move_learn_method.name === 'level-up' && 
+          detail.version_group.name === 'scarlet-violet'
+      )
+    );
+
+    let levelUpMoves = moves.map((move) => {
+      let levelUpDetail = move.version_group_details.find(
+        (detail) => 
+          detail.move_learn_method.name === 'level-up' && 
+          detail.version_group.name === 'scarlet-violet'
+      );
+
+      if (!levelUpDetail) {
+        levelUpDetail = move.version_group_details.find(
+          (detail) => 
+            detail.move_learn_method.name === 'level-up' && 
+            detail.version_group.name === 'brilliant-diamond-and-shining-pearl'
         );
+      }
 
-        if (!levelUpDetail) {
-          return null;
-        }
+      if (!levelUpDetail) {
+        return null; // Move will be filtered out
+      }
 
-        const moveName = move.move.name;
-        const levelLearnedAt = levelUpDetail.level_learned_at;
-        const moveUrl = move.move.url;
+      return {
+        moveName: move.move.name || 'Unknown',
+        levelLearnedAt: levelUpDetail.level_learned_at ?? 0,
+        moveUrl: move.move.url || '',
+      };
+    }).filter((move): move is { moveName: string; levelLearnedAt: number; moveUrl: string } => move !== null);
 
-        return { moveName, levelLearnedAt, moveUrl };
-      }).filter((move): move is { moveName: string; levelLearnedAt: number; moveUrl: string } => move !== null);
+    // If no level-up moves were found, return a default move
+    if (levelUpMoves.length === 0) {
+      console.warn(`No level-up moves found for ${name}. Returning default values.`);
+      return [{ moveName: 'Unknown', levelLearnedAt: 0, moveUrl: '' }];
+    }
 
-
-    levelUpMoves.sort((a, b) => a.levelLearnedAt - b.levelLearnedAt);
-    return levelUpMoves
+    return levelUpMoves;
+  } catch (error) {
+    console.error(`Error fetching moves for ${name}:`, error);
+    return [{ moveName: 'Unknown', levelLearnedAt: 0, moveUrl: '' }];
   }
+}
 
   export async function getPokemonAbility(name: string = 'bulbasaur') {
     const pkmn = await pokiapi.getPokemonByName(name)
